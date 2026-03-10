@@ -6,4 +6,4 @@
 ## 成员与角色
 - 张三（学号：2026XXXX001）- Product Owner (PO)
 - 李晨希（学号：9109223109）- Scrum Master (SM)
-- 王五（学号：2026XXXX003）- Development Team
+- 郑茹怡（学号：9109223175）- Development Team
