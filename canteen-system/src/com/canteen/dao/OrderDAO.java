@@ -86,6 +86,7 @@ public class OrderDAO {
         try {
             // 确保目录存在
             File file = new File(FILE_PATH);
+            // 使用目录
             File parentDir = file.getParentFile();
             if (parentDir != null && !parentDir.exists()) {
                 parentDir.mkdirs();
