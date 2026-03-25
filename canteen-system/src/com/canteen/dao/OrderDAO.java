@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 订单数据访问对象
- * 负责订单数据的文件读写操作
+ * 负责订单数据的读写
  */
 public class OrderDAO {
     private static final String FILE_PATH = "data/orders.txt";
