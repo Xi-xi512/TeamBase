@@ -85,7 +85,7 @@ build.bat
 
 #### 方式三：手动编译运行
 ```bash
-# 1. 进入项目目录
+# 1. 进入项目的目录
 cd D:\canteen-system
 
 # 2. 编译
