@@ -2,9 +2,9 @@ name: Java CI - Canteen System
 
 on:
   push:
-    branches: [ develop, main, master ]
+    branches: [ develop, main, master, dev-zheng ]
   pull_request:
-    branches: [ develop, main, master ]
+    branches: [ develop, main, master, dev-zheng ]
 
 jobs:
   build-and-test:
@@ -24,17 +24,9 @@ jobs:
       run: |
         cd canteen-system
         mkdir -p out
-        javac -d out -encoding UTF-8 \
-          src/com/canteen/entity/User.java \
-          src/com/canteen/entity/Dish.java \
-          src/com/canteen/entity/Order.java \
-          src/com/canteen/dao/OrderDAO.java \
-          src/com/canteen/service/LoginService.java \
-          src/com/canteen/service/DishService.java \
-          src/com/canteen/service/OrderService.java \
-          src/com/canteen/view/StudentView.java \
-          src/com/canteen/view/AdminView.java \
-          src/com/canteen/Main.java
+        # 自动查找所有 Java 文件，避免手动列出路径出错
+        find src -name "*.java" > sources.txt
+        javac -d out -encoding UTF-8 @sources.txt
 
     - name: Verify compilation
       run: |
@@ -44,9 +36,3 @@ jobs:
           echo "❌ Build failed!"
           exit 1
         fi
-
-    - name: Run basic validation
-      run: |
-        cd canteen-system/out
-        echo "com.canteen.Main" | timeout 5s java com.canteen.Main || true
-        echo "✅ Application starts successfully"
