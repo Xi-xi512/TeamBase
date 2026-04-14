@@ -1,0 +1,768 @@
+openapi: 3.0.3
+info:
+  title: 校园食堂智能推荐系统 API
+  description: |
+    校园食堂「光盘」行动智能推荐系统的 RESTful API 契约文档
+    - 版本: v1.0.0
+    - 联系: Xi-xi512 团队
+  version: 1.0.0
+  contact:
+    name: Xi-xi512 Team
+    email: team@example.com
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: 本地开发环境
+  - url: https://api.canteen-system.com/v1
+    description: 生产环境
+
+tags:
+  - name: 用户认证
+    description: 用户登录、注册、鉴权相关接口
+  - name: 菜品管理
+    description: 菜品查询、推荐、管理相关接口
+  - name: 订单管理
+    description: 订单创建、查询、统计相关接口
+  - name: 数据统计
+    description: 管理员统计报表相关接口
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - 用户认证
+      summary: 用户登录
+      description: 学生或管理员通过账号密码登录系统
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: stu1
+              password: "123456"
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                success: true
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                user:
+                  id: U001
+                  username: stu1
+                  name: 张三
+                  role: STUDENT
+        '401':
+          description: 登录失败，账号或密码错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: 账号或密码错误
+                code: 401
+
+  /auth/register:
+    post:
+      tags:
+        - 用户认证
+      summary: 用户注册
+      description: 新用户注册账号
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              username: stu4
+              password: "123456"
+              name: 赵六
+              role: STUDENT
+      responses:
+        '201':
+          description: 注册成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+              example:
+                success: true
+                message: 注册成功
+                user:
+                  id: U004
+                  username: stu4
+                  name: 赵六
+                  role: STUDENT
+        '409':
+          description: 用户已存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: 该账号已存在
+                code: 409
+
+  /dishes:
+    get:
+      tags:
+        - 菜品管理
+      summary: 获取菜品列表
+      description: 获取所有可选菜品列表，支持按类别筛选
+      operationId: listDishes
+      parameters:
+        - name: category
+          in: query
+          description: 菜品类别（可选）
+          schema:
+            type: string
+            enum: [热菜, 凉菜, 汤类, 主食, 素食]
+        - name: available
+          in: query
+          description: 是否仅显示可售菜品
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DishListResponse'
+              example:
+                success: true
+                data:
+                  - id: D001
+                    name: 红烧肉
+                    category: 热菜
+                    price: 12.00
+                    description: 经典红烧猪肉
+                    available: true
+                    supportsHalfPortion: true
+                  - id: D002
+                    name: 宫保鸡丁
+                    category: 热菜
+                    price: 10.00
+                    description: 经典川菜
+                    available: true
+                    supportsHalfPortion: true
+
+  /dishes/{dishId}:
+    get:
+      tags:
+        - 菜品管理
+      summary: 获取菜品详情
+      description: 根据菜品ID获取详细信息
+      operationId: getDish
+      parameters:
+        - name: dishId
+          in: path
+          required: true
+          description: 菜品ID
+          schema:
+            type: string
+            example: D001
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DishDetailResponse'
+              example:
+                success: true
+                data:
+                  id: D001
+                  name: 红烧肉
+                  category: 热菜
+                  price: 12.00
+                  description: 经典红烧猪肉
+                  available: true
+                  supportsHalfPortion: true
+                  nutritionInfo:
+                    calories: 450
+                    protein: 25
+                    fat: 35
+        '404':
+          description: 菜品不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: 菜品不存在
+                code: 404
+
+  /dishes/recommend:
+    get:
+      tags:
+        - 菜品管理
+      summary: 智能推荐菜品
+      description: 根据用户历史订单和营养需求推荐菜品
+      operationId: recommendDishes
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: date
+          in: query
+          description: 推荐日期（默认明日）
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          description: 推荐数量
+          schema:
+            type: integer
+            default: 5
+            minimum: 1
+            maximum: 20
+      responses:
+        '200':
+          description: 推荐成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DishListResponse'
+
+  /orders:
+    get:
+      tags:
+        - 订单管理
+      summary: 获取我的订单
+      description: 获取当前用户的所有订单记录
+      operationId: listMyOrders
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: 订单状态筛选
+          schema:
+            type: string
+            enum: [PENDING, CONFIRMED, CANCELLED, COMPLETED]
+        - name: date
+          in: query
+          description: 订单日期
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderListResponse'
+              example:
+                success: true
+                data:
+                  - id: ORD0001
+                    userId: U001
+                    userName: 张三
+                    dishId: D001
+                    dishName: 红烧肉
+                    portion: WHOLE
+                    price: 12.00
+                    status: PENDING
+                    orderDate: "2026-04-15"
+                    createdAt: "2026-04-14T10:30:00Z"
+
+    post:
+      tags:
+        - 订单管理
+      summary: 创建订单
+      description: 学生选择菜品并提交订单
+      operationId: createOrder
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+            example:
+              dishId: D001
+              portion: WHOLE
+              quantity: 1
+              date: "2026-04-15"
+              remark: 少盐
+      responses:
+        '201':
+          description: 订单创建成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrderResponse'
+              example:
+                success: true
+                message: 订单创建成功
+                data:
+                  id: ORD0001
+                  userId: U001
+                  userName: 张三
+                  dishId: D001
+                  dishName: 红烧肉
+                  portion: WHOLE
+                  price: 12.00
+                  status: PENDING
+                  orderDate: "2026-04-15"
+                  createdAt: "2026-04-14T10:30:00Z"
+        '400':
+          description: 请求参数错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: 菜品已售罄
+                code: 400
+
+  /orders/{orderId}:
+    get:
+      tags:
+        - 订单管理
+      summary: 获取订单详情
+      description: 根据订单ID获取订单详细信息
+      operationId: getOrder
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: 订单ID
+          schema:
+            type: string
+            example: ORD0001
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetailResponse'
+
+    delete:
+      tags:
+        - 订单管理
+      summary: 取消订单
+      description: 取消指定订单（仅学生可操作自己的订单）
+      operationId: cancelOrder
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: 订单ID
+          schema:
+            type: string
+            example: ORD0001
+      responses:
+        '200':
+          description: 取消成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelOrderResponse'
+              example:
+                success: true
+                message: 订单已取消
+
+  /admin/orders/statistics:
+    get:
+      tags:
+        - 数据统计
+      summary: 获取订餐统计
+      description: 管理员查看订餐统计报表（仅管理员可访问）
+      operationId: getOrderStatistics
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: date
+          in: query
+          required: true
+          description: 统计日期
+          schema:
+            type: string
+            format: date
+            example: "2026-04-15"
+      responses:
+        '200':
+          description: 获取统计成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsResponse'
+              example:
+                success: true
+                data:
+                  date: "2026-04-15"
+                  totalOrders: 45
+                  totalUsers: 38
+                  dishes:
+                    - dishId: D001
+                      dishName: 红烧肉
+                      totalQuantity: 15
+                      wholePortion: 12
+                      halfPortion: 3
+                      totalRevenue: 180.00
+                    - dishId: D002
+                      dishName: 宫保鸡丁
+                      totalQuantity: 10
+                      wholePortion: 8
+                      halfPortion: 2
+                      totalRevenue: 100.00
+
+  /admin/dishes:
+    post:
+      tags:
+        - 菜品管理
+      summary: 新增菜品
+      description: 管理员添加新菜品（仅管理员可访问）
+      operationId: createDish
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDishRequest'
+            example:
+              name: 鱼香肉丝
+              category: 热菜
+              price: 11.00
+              description: 经典家常菜
+              supportsHalfPortion: true
+      responses:
+        '201':
+          description: 新增成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DishDetailResponse'
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: 用户账号
+          example: stu1
+        password:
+          type: string
+          description: 用户密码
+          example: "123456"
+
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserInfo'
+
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - password
+        - name
+        - role
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [STUDENT, ADMIN]
+
+    RegisterResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserInfo'
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: U001
+        username:
+          type: string
+          example: stu1
+        name:
+          type: string
+          example: 张三
+        role:
+          type: string
+          enum: [STUDENT, ADMIN]
+
+    DishInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: D001
+        name:
+          type: string
+          example: 红烧肉
+        category:
+          type: string
+          example: 热菜
+        price:
+          type: number
+          format: float
+          example: 12.00
+        description:
+          type: string
+          example: 经典红烧猪肉
+        available:
+          type: boolean
+          default: true
+        supportsHalfPortion:
+          type: boolean
+          default: true
+        nutritionInfo:
+          $ref: '#/components/schemas/NutritionInfo'
+
+    NutritionInfo:
+      type: object
+      properties:
+        calories:
+          type: integer
+          description: 热量（卡路里）
+        protein:
+          type: number
+          format: float
+          description: 蛋白质（克）
+        fat:
+          type: number
+          format: float
+          description: 脂肪（克）
+
+    DishListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DishInfo'
+
+    DishDetailResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/DishInfo'
+
+    CreateOrderRequest:
+      type: object
+      required:
+        - dishId
+        - portion
+      properties:
+        dishId:
+          type: string
+          example: D001
+        portion:
+          type: string
+          enum: [WHOLE, HALF]
+          description: 份量（整份/半份）
+        quantity:
+          type: integer
+          default: 1
+          minimum: 1
+          maximum: 5
+        date:
+          type: string
+          format: date
+          description: 订餐日期
+        remark:
+          type: string
+          description: 备注
+          maxLength: 200
+
+    OrderInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ORD0001
+        userId:
+          type: string
+          example: U001
+        userName:
+          type: string
+          example: 张三
+        dishId:
+          type: string
+          example: D001
+        dishName:
+          type: string
+          example: 红烧肉
+        portion:
+          type: string
+          enum: [WHOLE, HALF]
+        price:
+          type: number
+          format: float
+          example: 12.00
+        status:
+          type: string
+          enum: [PENDING, CONFIRMED, CANCELLED, COMPLETED]
+        orderDate:
+          type: string
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+
+    OrderListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderInfo'
+
+    OrderDetailResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/OrderInfo'
+
+    CreateOrderResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/OrderInfo'
+
+    CancelOrderResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+    StatisticsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: '#/components/schemas/StatisticsInfo'
+
+    StatisticsInfo:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        totalOrders:
+          type: integer
+        totalUsers:
+          type: integer
+        dishes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DishStatistics'
+
+    DishStatistics:
+      type: object
+      properties:
+        dishId:
+          type: string
+        dishName:
+          type: string
+        totalQuantity:
+          type: integer
+        wholePortion:
+          type: integer
+        halfPortion:
+          type: integer
+        totalRevenue:
+          type: number
+          format: float
+
+    CreateDishRequest:
+      type: object
+      required:
+        - name
+        - category
+        - price
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+        supportsHalfPortion:
+          type: boolean
+          default: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          description: 错误信息
+        code:
+          type: integer
+          description: 错误码
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

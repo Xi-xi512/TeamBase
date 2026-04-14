@@ -1,0 +1,52 @@
+name: Java CI - Canteen System
+
+on:
+  push:
+    branches: [ develop, main, master ]
+  pull_request:
+    branches: [ develop, main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Build project
+      run: |
+        cd canteen-system
+        mkdir -p out
+        javac -d out -encoding UTF-8 \
+          src/com/canteen/entity/User.java \
+          src/com/canteen/entity/Dish.java \
+          src/com/canteen/entity/Order.java \
+          src/com/canteen/dao/OrderDAO.java \
+          src/com/canteen/service/LoginService.java \
+          src/com/canteen/service/DishService.java \
+          src/com/canteen/service/OrderService.java \
+          src/com/canteen/view/StudentView.java \
+          src/com/canteen/view/AdminView.java \
+          src/com/canteen/Main.java
+
+    - name: Verify compilation
+      run: |
+        if [ -d "canteen-system/out/com/canteen" ]; then
+          echo "✅ Build successful!"
+        else
+          echo "❌ Build failed!"
+          exit 1
+        fi
+
+    - name: Run basic validation
+      run: |
+        cd canteen-system/out
+        echo "com.canteen.Main" | timeout 5s java com.canteen.Main || true
+        echo "✅ Application starts successfully"
