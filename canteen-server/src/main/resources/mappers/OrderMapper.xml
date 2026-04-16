@@ -17,4 +17,8 @@
         SELECT CONCAT('ORD', LPAD(COALESCE(MAX(CAST(SUBSTRING(order_id, 4) AS UNSIGNED)) + 1, 1), 4, '0'))
         FROM canteen_order
     </select>
+
+    <select id="findById" resultType="Order">
+        SELECT * FROM canteen_order WHERE order_id = #{orderId}
+    </select>
 </mapper>
