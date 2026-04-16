@@ -40,4 +40,20 @@ public class DishController {
 
         return response;
     }
+
+    @PostMapping
+    public Map<String, Object> addDish(@RequestBody Dish dish) {
+        boolean result = dishService.addDish(dish);
+        Map<String, Object> response = new HashMap<>();
+
+        if (result) {
+            response.put("success", true);
+            response.put("message", "菜品添加成功");
+        } else {
+            response.put("success", false);
+            response.put("message", "菜品添加失败");
+        }
+
+        return response;
+    }
 }

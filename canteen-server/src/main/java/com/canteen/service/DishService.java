@@ -37,23 +37,14 @@ public class DishService {
         return dishDAO.findById(dishId);
     }
 
-    /**
-     * 打印菜品列表
-     */
-    public void printDishes() {
-        List<Dish> dishes = getAllDishes();
 
-        System.out.println("\n========== 明日菜品预览 ==========");
-        System.out.printf("%-6s %-12s %-8s %s%n", "编号", "菜名", "价格 (整)", "描述");
-        System.out.println("----------------------------------");
-        for (int i = 0; i < dishes.size(); i++) {
-            Dish dish = dishes.get(i);
-            System.out.printf("%-6s %-12s %-8.2f %s%n",
-                    (i + 1), dish.getName(), dish.getPrice(), dish.getDescription());
-        }
-        System.out.println("----------------------------------");
-        System.out.println("💡 提示：半份价格为整份的一半");
-        System.out.println("==================================\n");
+    /**
+     * 添加新菜品
+     * @param dish 菜品对象
+     * @return 是否添加成功
+     */
+    public boolean addDish(Dish dish) {
+        return dishDAO.save(dish);
     }
 }
 
