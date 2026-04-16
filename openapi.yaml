@@ -1,0 +1,588 @@
+openapi: 3.0.0
+info:
+  title: 校园食堂订餐系统 API
+  description: 提供食堂订餐系统的完整接口，包括用户认证、菜品管理、订单管理和统计报表等功能
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: 本地开发服务器
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          description: 用户账号
+          example: student1
+        password:
+          type: string
+          description: 用户密码
+          example: 123456
+        role:
+          type: string
+          description: 用户角色 (student 或 admin)
+          enum: [student, admin]
+          example: student
+        name:
+          type: string
+          description: 用户姓名
+          example: 张三
+      required:
+        - username
+        - password
+        - role
+        - name
+
+    Dish:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 菜品 ID
+          example: D001
+        name:
+          type: string
+          description: 菜品名称
+          example: 宫保鸡丁
+        price:
+          type: number
+          description: 价格（整份）
+          format: double
+          example: 15.0
+        description:
+          type: string
+          description: 菜品描述
+          example: 经典川菜，香辣可口
+      required:
+        - id
+        - name
+        - price
+        - description
+      examples:
+        dish1:
+          summary: 宫保鸡丁
+          value:
+            id: D001
+            name: 宫保鸡丁
+            price: 15.0
+            description: 经典川菜，香辣可口
+        dish2:
+          summary: 鱼香肉丝
+          value:
+            id: D002
+            name: 鱼香肉丝
+            price: 12.0
+            description: 酸甜可口，开胃下饭
+        dish3:
+          summary: 糖醋排骨
+          value:
+            id: D003
+            name: 糖醋排骨
+            price: 20.0
+            description: 外酥里嫩，酸甜适中
+        dish4:
+          summary: 麻婆豆腐
+          value:
+            id: D004
+            name: 麻婆豆腐
+            price: 10.0
+            description: 麻辣鲜香，豆腐嫩滑
+        dish5:
+          summary: 红烧肉
+          value:
+            id: D005
+            name: 红烧肉
+            price: 25.0
+            description: 肥而不腻，入口即化
+
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: 订单 ID
+          example: ORD0001
+        username:
+          type: string
+          description: 订餐学生账号
+          example: student1
+        studentName:
+          type: string
+          description: 学生姓名
+          example: 张三
+        dishId:
+          type: string
+          description: 菜品 ID
+          example: D001
+        dishName:
+          type: string
+          description: 菜品名称
+          example: 宫保鸡丁
+        portion:
+          type: string
+          description: 份量 (whole 或 half)
+          enum: [whole, half]
+          example: whole
+        price:
+          type: number
+          description: 订单价格
+          format: double
+          example: 15.0
+        date:
+          type: string
+          description: 预定日期
+          format: date
+          example: 2026-04-16
+      required:
+        - orderId
+        - username
+        - studentName
+        - dishId
+        - dishName
+        - portion
+        - price
+        - date
+      examples:
+        order1:
+          summary: 学生1整份宫保鸡丁
+          value:
+            orderId: ORD0001
+            username: student1
+            studentName: 张三
+            dishId: D001
+            dishName: 宫保鸡丁
+            portion: whole
+            price: 15.0
+            date: 2026-04-16
+        order2:
+          summary: 学生1半份鱼香肉丝
+          value:
+            orderId: ORD0002
+            username: student1
+            studentName: 张三
+            dishId: D002
+            dishName: 鱼香肉丝
+            portion: half
+            price: 6.0
+            date: 2026-04-16
+        order3:
+          summary: 学生2整份糖醋排骨
+          value:
+            orderId: ORD0003
+            username: student2
+            studentName: 李四
+            dishId: D003
+            dishName: 糖醋排骨
+            portion: whole
+            price: 20.0
+            date: 2026-04-16
+        order4:
+          summary: 学生2半份麻婆豆腐
+          value:
+            orderId: ORD0004
+            username: student2
+            studentName: 李四
+            dishId: D004
+            dishName: 麻婆豆腐
+            portion: half
+            price: 5.0
+            date: 2026-04-16
+        order5:
+          summary: 学生1整份红烧肉
+          value:
+            orderId: ORD0005
+            username: student1
+            studentName: 张三
+            dishId: D005
+            dishName: 红烧肉
+            portion: whole
+            price: 25.0
+            date: 2026-04-17
+
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: 用户账号
+          example: student1
+        password:
+          type: string
+          description: 用户密码
+          example: 123456
+      required:
+        - username
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: 登录是否成功
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+          description: JWT 令牌
+
+    OrderCreateRequest:
+      type: object
+      properties:
+        dishId:
+          type: string
+          description: 菜品 ID
+          example: D001
+        portion:
+          type: string
+          description: 份量 (whole 或 half)
+          enum: [whole, half]
+          example: whole
+      required:
+        - dishId
+        - portion
+
+    StatisticsResponse:
+      type: object
+      properties:
+        totalStudents:
+          type: integer
+          description: 订餐总人数
+          example: 5
+        totalOrders:
+          type: integer
+          description: 订单总数
+          example: 8
+        dishStats:
+          type: object
+          additionalProperties:
+            type: number
+          description: 各菜品需求量统计
+          example:
+            宫保鸡丁: 15.5
+            鱼香肉丝: 12.0
+            糖醋排骨: 8.5
+            麻婆豆腐: 6.0
+            红烧肉: 5.5
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /auth/login:
+    post:
+      summary: 用户登录
+      description: 验证用户身份并返回 JWT 令牌
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: 账号或密码错误
+
+  /auth/logout:
+    post:
+      summary: 用户登出
+      description: 退出当前用户登录状态
+      # security:
+      #   - bearerAuth: []
+      responses:
+        '200':
+          description: 登出成功
+
+  /dishes:
+    get:
+      summary: 获取所有菜品
+      description: 返回系统中所有可用的菜品
+      responses:
+        '200':
+          description: 成功获取菜品列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dish'
+              example:
+                - id: D001
+                  name: 宫保鸡丁
+                  price: 15.0
+                  description: 经典川菜，香辣可口
+                - id: D002
+                  name: 鱼香肉丝
+                  price: 12.0
+                  description: 酸甜可口，开胃下饭
+                - id: D003
+                  name: 糖醋排骨
+                  price: 20.0
+                  description: 外酥里嫩，酸甜适中
+                - id: D004
+                  name: 麻婆豆腐
+                  price: 10.0
+                  description: 麻辣鲜香，豆腐嫩滑
+                - id: D005
+                  name: 红烧肉
+                  price: 25.0
+                  description: 肥而不腻，入口即化
+    post:
+      summary: 新增菜品
+      description: 添加新的菜品到系统中（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dish'
+      responses:
+        '201':
+          description: 菜品创建成功
+        '403':
+          description: 权限不足
+
+  /dishes/{id}:
+    get:
+      summary: 获取单个菜品
+      description: 根据菜品 ID 获取详细信息
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 菜品 ID
+      responses:
+        '200':
+          description: 成功获取菜品信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
+        '404':
+          description: 菜品不存在
+    put:
+      summary: 更新菜品
+      description: 更新现有菜品的信息（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 菜品 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dish'
+      responses:
+        '200':
+          description: 菜品更新成功
+        '403':
+          description: 权限不足
+        '404':
+          description: 菜品不存在
+    delete:
+      summary: 删除菜品
+      description: 从系统中删除菜品（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 菜品 ID
+      responses:
+        '200':
+          description: 菜品删除成功
+        '403':
+          description: 权限不足
+        '404':
+          description: 菜品不存在
+
+  /orders:
+    get:
+      summary: 获取所有订单
+      description: 返回系统中所有订单（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      responses:
+        '200':
+          description: 成功获取订单列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '403':
+          description: 权限不足
+    post:
+      summary: 创建订单
+      description: 为当前登录学生创建新订单
+      # security:
+      #   - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateRequest'
+      responses:
+        '201':
+          description: 订单创建成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+
+  /orders/student:
+    get:
+      summary: 获取学生自己的订单
+      description: 返回当前登录学生的所有订单
+      # security:
+      #   - bearerAuth: []
+      responses:
+        '200':
+          description: 成功获取订单列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /orders/{id}:
+    delete:
+      summary: 取消订单
+      description: 取消指定的订单
+      # security:
+      #   - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 订单 ID
+      responses:
+        '200':
+          description: 订单取消成功
+        '404':
+          description: 订单不存在
+
+  /reports/statistics:
+    get:
+      summary: 获取统计数据
+      description: 返回订餐系统的统计报表数据（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      responses:
+        '200':
+          description: 成功获取统计数据
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsResponse'
+        '403':
+          description: 权限不足
+
+  /users:
+    get:
+      summary: 获取所有用户
+      description: 返回系统中所有用户（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      responses:
+        '200':
+          description: 成功获取用户列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403':
+          description: 权限不足
+    post:
+      summary: 新增用户
+      description: 添加新用户到系统（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: 用户创建成功
+        '403':
+          description: 权限不足
+
+  /users/{username}:
+    put:
+      summary: 更新用户
+      description: 更新现有用户的信息（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+          description: 用户名
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: 用户更新成功
+        '403':
+          description: 权限不足
+        '404':
+          description: 用户不存在
+    delete:
+      summary: 删除用户
+      description: 从系统中删除用户（仅管理员）
+      # security:
+      #   - bearerAuth: []
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+          description: 用户名
+      responses:
+        '200':
+          description: 用户删除成功
+        '403':
+          description: 权限不足
+        '404':
+          description: 用户不存在
