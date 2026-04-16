@@ -72,4 +72,21 @@ public class OrderController {
         response.put("statistics", stats);
         return response;
     }
+
+    @PutMapping("/{id}/portion")
+    public Map<String, Object> updateOrderPortion(@PathVariable String id, @RequestBody Map<String, String> portionUpdate) {
+        String portion = portionUpdate.get("portion");
+        boolean result = orderService.updateOrderPortion(id, portion);
+        Map<String, Object> response = new HashMap<>();
+
+        if (result) {
+            response.put("success", true);
+            response.put("message", "订单份量更新成功");
+        } else {
+            response.put("success", false);
+            response.put("message", "订单份量更新失败");
+        }
+
+        return response;
+    }
 }
