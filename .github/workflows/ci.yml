@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          # 去掉 cache 配置，避免它在根目录找锁文件
+
 
       - name: Build and test backend
         working-directory: ./canteen-server
