@@ -29,5 +29,14 @@ public interface OrderDAO {
      * @return 订单 ID
      */
     String generateOrderId();
+
+    /**
+     * 根据ID查找订单
+     * @param orderId 订单ID
+     * @return 订单对象
+     */
+    Order findById(String orderId);
+
+
 }
 
