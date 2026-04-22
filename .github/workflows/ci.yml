@@ -1,9 +1,6 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      - develop
   pull_request:
     branches:
       - develop
@@ -20,13 +17,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven  # 加速依赖下载，不会报错
+          cache: maven
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm' # 加速前端下载
+          # 去掉 cache 配置，避免它在根目录找锁文件
 
       - name: Build and test backend
         working-directory: ./canteen-server
