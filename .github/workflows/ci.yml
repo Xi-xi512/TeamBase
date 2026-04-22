@@ -3,7 +3,7 @@ name: CI Pipeline
 on:
   pull_request:
     branches:
-      - dev-li
+      - develop
 
 jobs:
   build-and-test:
@@ -17,16 +17,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven  # 加速依赖下载，不会报错
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm' # 加速前端下载
 
       - name: Build and test backend
         working-directory: ./canteen-server
         run: |
-          mvn clean package -DskipTests=false
+          mvn clean test
 
       - name: Build frontend
         working-directory: ./frontend
