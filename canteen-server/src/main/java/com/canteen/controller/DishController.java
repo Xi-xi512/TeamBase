@@ -2,6 +2,7 @@ package com.canteen.controller;
 
 import com.canteen.entity.Dish;
 import com.canteen.service.DishService;
+import com.canteen.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,12 @@ public class DishController {
     private DishService dishService;
 
     @GetMapping
-    public Map<String, Object> getAllDishes() {
-        List<Dish> dishes = dishService.getAllDishes();
+    public Map<String, Object> getTomorrowDishes() {
+        List<Dish> dishes = dishService.getTomorrowMenu();
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         response.put("dishes", dishes);
+        response.put("menuDate", DateUtils.tomorrowYyyyMmDd());
         return response;
     }
 

@@ -37,6 +37,19 @@ public interface OrderDAO {
      */
     Order findById(String orderId);
 
+    /**
+     * 按用户查询历史订单，供餐日新到旧
+     */
+    List<Order> findByUsername(String username);
 
+    /**
+     * 统计引用某菜品的订单数（用于删除前检查）
+     */
+    int countByDishId(String dishId);
+
+    /**
+     * 根据订单号删除订单
+     */
+    boolean deleteById(String orderId);
 }
 

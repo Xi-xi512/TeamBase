@@ -5,12 +5,14 @@
 
 <mapper namespace="com.canteen.dao.OrderDAO">
     <select id="readAllOrders" resultType="Order">
-        SELECT * FROM canteen_order
+        SELECT order_id, username, student_name, dish_id, dish_name, portion, price, `date`,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') AS created_at
+        FROM canteen_order
     </select>
 
     <insert id="saveOrder" parameterType="Order">
-        INSERT INTO canteen_order (order_id, username, student_name, dish_id, dish_name, portion, price, date)
-        VALUES (#{orderId}, #{username}, #{studentName}, #{dishId}, #{dishName}, #{portion}, #{price}, #{date})
+        INSERT INTO canteen_order (order_id, username, student_name, dish_id, dish_name, portion, price, `date`, create_time)
+        VALUES (#{orderId}, #{username}, #{studentName}, #{dishId}, #{dishName}, #{portion}, #{price}, #{date}, #{createdAt})
     </insert>
 
     <select id="generateOrderId" resultType="String">
@@ -19,6 +21,25 @@
     </select>
 
     <select id="findById" resultType="Order">
-        SELECT * FROM canteen_order WHERE order_id = #{orderId}
+        SELECT order_id, username, student_name, dish_id, dish_name, portion, price, `date`,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') AS created_at
+        FROM canteen_order
+        WHERE order_id = #{orderId}
     </select>
+
+    <select id="findByUsername" parameterType="String" resultType="Order">
+        SELECT order_id, username, student_name, dish_id, dish_name, portion, price, `date`,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') AS created_at
+        FROM canteen_order
+        WHERE username = #{username}
+        ORDER BY create_time DESC, order_id DESC
+    </select>
+
+    <select id="countByDishId" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM canteen_order WHERE dish_id = #{dishId}
+    </select>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM canteen_order WHERE order_id = #{orderId}
+    </delete>
 </mapper>

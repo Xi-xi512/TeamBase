@@ -14,12 +14,13 @@ public class Order {
     private String portion;         // 份量：whole(整份) 或 half(半份)
     private double price;           // 订单价格
     private String date;            // 预定日期（默认为明日）
+    private String createdAt;       // 订单创建时间 yyyy-MM-dd HH:mm:ss
 
     public Order() {
     }
 
     public Order(String orderId, String username, String studentName,
-                 String dishId, String dishName, String portion, double price, String date) {
+                 String dishId, String dishName, String portion, double price, String date, String createdAt) {
         this.orderId = orderId;
         this.username = username;
         this.studentName = studentName;
@@ -28,6 +29,7 @@ public class Order {
         this.portion = portion;
         this.price = price;
         this.date = date;
+        this.createdAt = createdAt;
     }
 
     public String getOrderId() {
@@ -94,6 +96,14 @@ public class Order {
         this.date = date;
     }
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -105,6 +115,7 @@ public class Order {
                 ", portion='" + portion + '\'' +
                 ", price=" + price +
                 ", date='" + date + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }

@@ -3,9 +3,11 @@ package com.canteen.service;
 
 import com.canteen.dao.OrderDAO;
 import com.canteen.entity.Order;
+import com.canteen.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 统计报表服务类
@@ -25,7 +27,16 @@ public class ReportService {
      * @return 统计结果 Map
      */
     public Map<String, Object> getStatistics() {
-        List<Order> orders = orderDAO.readAllOrders();
+        return getStatisticsForServingDate(DateUtils.tomorrowYyyyMmDd());
+    }
+
+    /**
+     * 指定供餐日的订餐统计（用于管理员按明日备餐）
+     */
+    public Map<String, Object> getStatisticsForServingDate(String servingDate) {
+        List<Order> orders = orderDAO.readAllOrders().stream()
+                .filter(o -> servingDate != null && servingDate.equals(o.getDate()))
+                .collect(Collectors.toList());
 
         Map<String, Double> dishStats = new HashMap<>();  // 菜品名称 -> 总份数
         Set<String> uniqueStudents = new HashSet<>();  // 去重学生
@@ -49,6 +60,7 @@ public class ReportService {
         result.put("totalStudents", uniqueStudents.size());
         result.put("dishStats", dishStats);
         result.put("totalOrders", orders.size());
+        result.put("servingDate", servingDate);
 
         return result;
     }
@@ -60,6 +72,7 @@ public class ReportService {
         Map<String, Object> stats = getStatistics();
 
         System.out.println("\n========== 订餐统计报表 ==========");
+        System.out.println("📅 供餐日：" + stats.get("servingDate"));
         System.out.println("📊 订餐总人数：" + stats.get("totalStudents") + " 人");
         System.out.println("📝 订单总数：" + stats.get("totalOrders") + " 单");
         System.out.println("----------------------------------");
