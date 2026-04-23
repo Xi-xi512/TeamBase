@@ -3,40 +3,13 @@
 一个前后端分离的教学项目：学生可浏览明日菜单并下单，管理员可维护菜品并查看明日备餐统计。
 
 ## 系统架构
+- 本系统采用前后端分离的 MVC 架构，整体分为前端、后端服务与数据库三层。
+- 前端：基于 Vue3 + Element Plus 实现，分为登录、学生端、管理员端三个核心视图，通过 HTTP 接口与后端交互。
+- 后端：基于 Spring Boot 构建，分为 Controller 控制层、Service 业务层、DAO 数据访问层三层结构，分别处理请求分发、业务逻辑与数据持久化。
+- 数据库：采用 MySQL 存储系统核心数据，通过 MyBatis 实现数据访问。
+该架构实现了前后端解耦，同时后端分层设计保障了代码的可维护性与可扩展性，为本次 TDD 回归保护提供了清晰的业务边界。
 
-```mermaid
-flowchart LR
-    A[Vue3 + Element Plus 前端] -->|HTTP /api| B[Spring Boot Controller]
-    B --> C[Service 业务层]
-    C --> D[MyBatis DAO]
-    D --> E[(MySQL canteen)]
-
-    subgraph Frontend
-      A1[LoginView]
-      A2[StudentView]
-      A3[AdminView]
-    end
-    A --- A1
-    A --- A2
-    A --- A3
-
-    subgraph Backend
-      B1[LoginController]
-      B2[DishController / AdminDishController]
-      B3[OrderController]
-      C1[LoginService]
-      C2[DishService]
-      C3[OrderService]
-      C4[ReportService]
-    end
-    B --- B1
-    B --- B2
-    B --- B3
-    C --- C1
-    C --- C2
-    C --- C3
-    C --- C4
-```
+![架构图](docs/images/system-architecture.png)
 
 ## 技术栈
 
@@ -120,6 +93,40 @@ flowchart LR
 - CI 自动执行：
   - `.github/workflows/ci.yml` 在 `push/pull_request -> develop` 时执行后端 `mvn clean test`，并构建前端 `npm run build`
 
+## 📱 前端界面预览
+系统分为**学生端**与**管理端**，以下为核心功能页面展示，新成员可通过界面快速对应业务模块与代码结构。
+
+### 🔐 登录页面
+![登录页面](docs/images/login.png)
+- 功能：支持学生/管理员角色登录，完成身份校验
+- 对应前端：`src/views/LoginView.vue`
+- 对应后端：`LoginController`、`LoginService`
+
+### 👨‍🎓 学生端 - 明日菜单页面
+![明日菜单页面](docs/images/student-menu.png)
+- 功能：展示次日可点菜品，支持选择整份/半份、加入订单
+- 对应前端：`src/views/StudentView.vue`
+- 对应后端：`DishController`、`DishService`
+- 核心规则：半份价格 = 整份价格 / 2
+
+### 👨‍🎓 学生端 - 我的订单页面
+![我的订单页面](docs/images/student-order.png)
+- 功能：查看个人历史订单、修改份量、取消明日订单
+- 对应前端：`src/views/StudentView.vue`
+- 对应后端：`OrderController`、`OrderService`
+
+### 🔧 管理端 - 菜品管理页面
+![菜品管理页面](docs/images/admin-dish.png)
+- 功能：管理员新增/编辑/删除菜品，按供餐日维护菜单
+- 对应前端：`src/views/AdminView.vue`
+- 对应后端：`AdminDishController`、`DishService`
+- 约束：删除菜品前校验订单关联，避免数据异常
+
+### 📊 管理端 - 备餐统计页面
+![备餐统计页面](docs/images/admin-report.png)
+- 功能：按供餐日统计订餐人数、订单总量、菜品需求量（半份按0.5计算）
+- 对应前端：`src/views/AdminView.vue`
+- 对应后端：`ReportService`
 ## 团队成员
 
 - 樊世奇（学号：9107123050）- Product Owner (PO)
