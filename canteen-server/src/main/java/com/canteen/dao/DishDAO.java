@@ -25,6 +25,11 @@ public interface DishDAO {
     List<Dish> findAll();
 
     /**
+     * 按可订日期查询菜品（明日菜单）
+     */
+    List<Dish> findByMenuDate(String menuDate);
+
+    /**
      * 保存菜品（新增或更新）
      * @param dish 菜品对象
      * @return 是否保存成功

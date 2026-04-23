@@ -11,15 +11,18 @@ public class Dish {
     private String name;          // 菜品名称
     private double price;         // 价格（整份）
     private String description;   // 菜品描述
+    /** 供餐/可订日期 yyyy-MM-dd，与订单 date 一致（明日订餐即明日） */
+    private String menuDate;
 
     public Dish() {
     }
 
-    public Dish(String id, String name, double price, String description) {
+    public Dish(String id, String name, double price, String description, String menuDate) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.menuDate = menuDate;
     }
 
     public String getId() {
@@ -54,6 +57,14 @@ public class Dish {
         this.description = description;
     }
 
+    public String getMenuDate() {
+        return menuDate;
+    }
+
+    public void setMenuDate(String menuDate) {
+        this.menuDate = menuDate;
+    }
+
     @Override
     public String toString() {
         return "Dish{" +
@@ -61,6 +72,7 @@ public class Dish {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
+                ", menuDate='" + menuDate + '\'' +
                 '}';
     }
 }

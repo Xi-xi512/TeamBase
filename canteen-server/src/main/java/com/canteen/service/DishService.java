@@ -3,6 +3,7 @@ package com.canteen.service;
 
 import com.canteen.dao.DishDAO;
 import com.canteen.entity.Dish;
+import com.canteen.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -38,10 +39,29 @@ public class DishService {
     }
 
     /**
+     * 明日可订菜品（menu_date 与系统「明日」一致）
+     */
+    public List<Dish> getTomorrowMenu() {
+        return dishDAO.findByMenuDate(DateUtils.tomorrowYyyyMmDd());
+    }
+
+    public List<Dish> listByMenuDate(String menuDate) {
+        return dishDAO.findByMenuDate(menuDate);
+    }
+
+    /**
      * 打印菜品列表
      */
+    public boolean saveDish(Dish dish) {
+        return dishDAO.save(dish);
+    }
+
+    public boolean deleteDishById(String id) {
+        return dishDAO.delete(id);
+    }
+
     public void printDishes() {
-        List<Dish> dishes = getAllDishes();
+        List<Dish> dishes = getTomorrowMenu();
 
         System.out.println("\n========== 明日菜品预览 ==========");
         System.out.printf("%-6s %-12s %-8s %s%n", "编号", "菜名", "价格 (整)", "描述");

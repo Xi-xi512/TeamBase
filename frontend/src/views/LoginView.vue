@@ -1,23 +1,30 @@
 <template>
-  <div class="login-container">
-    <div class="login-form">
-      <h2>校园食堂订餐系统</h2>
-      <div class="form-group">
-        <label for="username">账号</label>
-        <input type="text" id="username" v-model="username" placeholder="请输入账号">
+  <div class="login-page">
+    <el-card class="login-card" shadow="hover">
+      <div class="brand">
+        <h1>校园食堂订餐系统</h1>
       </div>
-      <div class="form-group">
-        <label for="password">密码</label>
-        <input type="password" id="password" v-model="password" placeholder="请输入密码">
-      </div>
-      <button class="login-btn" @click="login">登录</button>
-      <div class="test-accounts" @click="showTestAccounts">
-        查看测试账号
-      </div>
-      <div v-if="testAccountsVisible" class="test-accounts-list">
+      <el-form label-position="top" @submit.prevent>
+        <el-form-item label="账号">
+          <el-input v-model="username" placeholder="请输入账号" @input="clearError" />
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="password" type="password" show-password placeholder="请输入密码" @input="clearError" />
+        </el-form-item>
+      </el-form>
+      <el-alert v-if="errorMsg" :title="errorMsg" type="error" :closable="false" show-icon />
+      <el-button type="primary" class="login-btn" @click="login">登录</el-button>
+      <el-button text class="test-btn" @click="showTestAccounts">查看测试账号</el-button>
+      <el-alert
+        v-if="testAccountsVisible"
+        class="test-box"
+        title="测试账号"
+        type="info"
+        :closable="false"
+      >
         <pre>{{ testAccounts }}</pre>
-      </div>
-    </div>
+      </el-alert>
+    </el-card>
   </div>
 </template>
 
@@ -29,11 +36,20 @@ export default {
       username: '',
       password: '',
       testAccounts: '',
-      testAccountsVisible: false
+      testAccountsVisible: false,
+      errorMsg: ''
     }
   },
   methods: {
+    clearError() {
+      this.errorMsg = ''
+    },
     async login() {
+      this.errorMsg = ''
+      if (!this.username.trim() || !this.password) {
+        this.errorMsg = '请输入账号和密码'
+        return
+      }
       try {
         const response = await fetch('/api/login', {
           method: 'POST',
@@ -42,8 +58,18 @@ export default {
           },
           body: JSON.stringify({ username: this.username, password: this.password })
         })
-        const data = await response.json()
-        if (data.success) {
+        const text = await response.text()
+        let data = null
+        try {
+          data = text ? JSON.parse(text) : null
+        } catch (e) {
+          console.error('登录响应非 JSON', text)
+        }
+        if (!response.ok) {
+          this.errorMsg = (data && data.message) || ('登录请求失败 (HTTP ' + response.status + ')')
+          return
+        }
+        if (data && data.success) {
           const user = data.user
           localStorage.setItem('user', JSON.stringify(user))
           if (user.role === 'admin') {
@@ -52,11 +78,11 @@ export default {
             this.$router.push('/student')
           }
         } else {
-          alert(data.message)
+          this.errorMsg = (data && data.message) || '账号或密码错误，请重试'
         }
       } catch (error) {
         console.error('登录失败:', error)
-        alert('登录失败，请稍后重试')
+        this.errorMsg = '网络异常，请稍后重试'
       }
     },
     async showTestAccounts() {
@@ -76,83 +102,59 @@ export default {
 </script>
 
 <style scoped>
-.login-container {
+.login-page {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  padding: var(--space-4);
 }
 
-.login-form {
-  background-color: white;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+.login-card {
+  width: min(520px, 96vw);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--shadow-3);
 }
 
-.login-form h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+.brand {
+  margin-bottom: var(--space-4);
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #666;
-  font-size: 14px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+.brand h1 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--theme-text);
 }
 
 .login-btn {
   width: 100%;
-  padding: 12px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
-.login-btn:hover {
-  background-color: #45a049;
+.test-btn {
+  width: 100%;
+  margin-top: 8px;
 }
 
-.test-accounts {
-  text-align: center;
-  margin-top: 20px;
-  color: #666;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.test-accounts-list {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  font-size: 14px;
+.test-box {
+  margin-top: 12px;
 }
 
 pre {
+  margin: 0;
   white-space: pre-wrap;
-  font-family: Arial, sans-serif;
+  font-family: inherit;
+  color: var(--theme-text);
+}
+
+@media (max-width: 768px) {
+  .brand h1 {
+    font-size: 22px;
+  }
+
+  .login-page {
+    padding: var(--space-2);
+  }
 }
 </style>

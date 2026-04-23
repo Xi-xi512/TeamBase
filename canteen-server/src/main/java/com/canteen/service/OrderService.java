@@ -5,10 +5,10 @@ import com.canteen.dao.OrderDAO;
 import com.canteen.entity.Dish;
 import com.canteen.entity.Order;
 import com.canteen.entity.User;
+import com.canteen.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.List;
 
 /**
  * 订单服务类
@@ -29,10 +29,7 @@ public class OrderService {
      * @return 日期字符串
      */
     public String getTomorrowDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 1);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(calendar.getTime());
+        return DateUtils.tomorrowYyyyMmDd();
     }
 
     /**
@@ -57,6 +54,7 @@ public class OrderService {
         order.setPortion(portion);
         order.setPrice(price);
         order.setDate(getTomorrowDate());
+        order.setCreatedAt(DateUtils.nowYyyyMmDdHhMmSs());
 
         return order;
     }
@@ -70,6 +68,17 @@ public class OrderService {
         return orderDAO.saveOrder(order);
     }
 
+    public List<Order> listOrdersByUsername(String username) {
+        return orderDAO.findByUsername(username);
+    }
+
+    public Order getById(String orderId) {
+        return orderDAO.findById(orderId);
+    }
+
+    public boolean deleteOrder(String orderId) {
+        return orderDAO.deleteById(orderId);
+    }
 
     /**
      * 更新订单份量

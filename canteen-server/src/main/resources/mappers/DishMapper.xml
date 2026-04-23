@@ -9,14 +9,18 @@
     </select>
 
     <select id="findAll" resultType="Dish">
-        SELECT * FROM dish
+        SELECT * FROM dish ORDER BY menu_date DESC, id
+    </select>
+
+    <select id="findByMenuDate" parameterType="String" resultType="Dish">
+        SELECT * FROM dish WHERE menu_date = #{menuDate}
     </select>
 
     <insert id="save" parameterType="Dish">
-        INSERT INTO dish (id, name, price, description)
-        VALUES (#{id}, #{name}, #{price}, #{description})
+        INSERT INTO dish (id, name, price, description, menu_date)
+        VALUES (#{id}, #{name}, #{price}, #{description}, #{menuDate})
         ON DUPLICATE KEY UPDATE
-        name = #{name}, price = #{price}, description = #{description}
+        name = #{name}, price = #{price}, description = #{description}, menu_date = #{menuDate}
     </insert>
 
     <delete id="delete" parameterType="String">
