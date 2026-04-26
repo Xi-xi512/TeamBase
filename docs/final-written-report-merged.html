@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>final-written-report-merged.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E8%BF%AD%E4%BB%A3-4--ai-%E5%B7%A5%E7%A8%8B%E6%96%B9%E6%B3%95%E8%AE%BA%E5%AE%9E%E6%88%98%E6%8A%A5%E5%91%8A">迭代 4 — AI 工程方法论实战报告</h1>
+<p><code>8-1 AI 辅助测试 Prompt 演化实验</code> -&gt; <code>8-2 项目级 AGENTS.md</code> -&gt; <code>8-3 CIVC 自评审计报告</code></p>
+<hr>
+<h1 id="ai-%E8%BE%85%E5%8A%A9%E6%B5%8B%E8%AF%95-prompt-%E6%BC%94%E5%8C%96%E5%AE%9E%E9%AA%8C%E5%9B%9E%E6%89%A3-8-1">AI 辅助测试 Prompt 演化实验（回扣 8-1）</h1>
+<h2 id="%E6%A1%88%E4%BE%8B-1ordercontrollercreateorder">案例 1：<code>OrderController#createOrder</code></h2>
+<h3 id="%E5%88%9D%E5%A7%8B-prompt">初始 Prompt</h3>
+<pre class="hljs"><code><div>请帮我给 OrderController 写单元测试，覆盖创建订单接口。
+</div></code></pre>
+<h3 id="ai-%E8%BE%93%E5%87%BA%E9%97%AE%E9%A2%98">AI 输出问题</h3>
+<ul>
+<li>重言式测试：只断言 200，不断言 <code>success/message</code>。</li>
+<li>边界缺失：未覆盖 <code>portion</code> 非法、菜品不在明日菜单。</li>
+<li>Mock 不完整：遗漏 <code>UserDAO</code>/<code>DishService</code> 协作分支。</li>
+</ul>
+<h3 id="%E6%94%B9%E8%BF%9B-prompt%E7%BB%93%E6%9E%84%E5%8C%96%E6%8C%87%E4%BB%A4--few-shot">改进 Prompt（结构化指令 + Few-shot）</h3>
+<pre class="hljs"><code><div>你是资深 Java 测试工程师。请为 Spring Boot 的 OrderController 编写 WebMvcTest，
+使用 MockMvc + Mockito，不连接数据库。
+
+目标：POST /api/orders（createOrder）
+必须覆盖：
+1) portion 非 whole/half -&gt; success=false, message=份量须为 whole 或 half
+2) dish.menuDate != tomorrow -&gt; success=false, message=该菜品不在明日可订菜单中
+3) submitOrder=true -&gt; success=true, message=订单创建成功，且返回 orderId
+
+约束：
+- 每个用例必须断言 success 和 message
+- 失败分支需要 verify(..., never()) 证明未误调用写操作
+- 按如下风格输出：
+  andExpect(jsonPath(&quot;$.success&quot;).value(false))
+  andExpect(jsonPath(&quot;$.message&quot;).value(&quot;xxx&quot;))
+</div></code></pre>
+<h3 id="%E6%9C%80%E7%BB%88%E5%8F%AF%E7%94%A8%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81">最终可用测试代码</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">package</span> com.canteen.controller;
+
+<span class="hljs-keyword">import</span> com.canteen.dao.UserDAO;
+<span class="hljs-keyword">import</span> com.canteen.entity.Dish;
+<span class="hljs-keyword">import</span> com.canteen.entity.Order;
+<span class="hljs-keyword">import</span> com.canteen.entity.User;
+<span class="hljs-keyword">import</span> com.canteen.service.DishService;
+<span class="hljs-keyword">import</span> com.canteen.service.OrderService;
+<span class="hljs-keyword">import</span> com.canteen.service.ReportService;
+<span class="hljs-keyword">import</span> org.junit.jupiter.api.Test;
+<span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;
+<span class="hljs-keyword">import</span> org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+<span class="hljs-keyword">import</span> org.springframework.boot.test.mock.mockito.MockBean;
+<span class="hljs-keyword">import</span> org.springframework.http.MediaType;
+<span class="hljs-keyword">import</span> org.springframework.test.web.servlet.MockMvc;
+
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.ArgumentMatchers.any;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.Mockito.never;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.Mockito.verify;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.Mockito.when;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+<span class="hljs-meta">@WebMvcTest</span>(OrderController<span class="hljs-class">.<span class="hljs-keyword">class</span>)
+<span class="hljs-title">class</span> <span class="hljs-title">OrderControllerMockTest</span> </span>{
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> MockMvc mockMvc;
+
+    <span class="hljs-meta">@MockBean</span>
+    <span class="hljs-keyword">private</span> OrderService orderService;
+    <span class="hljs-meta">@MockBean</span>
+    <span class="hljs-keyword">private</span> ReportService reportService;
+    <span class="hljs-meta">@MockBean</span>
+    <span class="hljs-keyword">private</span> DishService dishService;
+    <span class="hljs-meta">@MockBean</span>
+    <span class="hljs-keyword">private</span> UserDAO userDAO;
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">createOrder_shouldRejectWhenPortionInvalid</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        User student = <span class="hljs-keyword">new</span> User(<span class="hljs-string">"stu1"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"student"</span>, <span class="hljs-string">"张三"</span>);
+        when(userDAO.findByUsername(<span class="hljs-string">"stu1"</span>)).thenReturn(student);
+
+        mockMvc.perform(post(<span class="hljs-string">"/api/orders"</span>)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(<span class="hljs-string">""</span><span class="hljs-string">"
+                                {"</span>username<span class="hljs-string">":"</span>stu1<span class="hljs-string">","</span>dishId<span class="hljs-string">":"</span>D001<span class="hljs-string">","</span>portion<span class="hljs-string">":"</span>quarter<span class="hljs-string">"}
+                                "</span><span class="hljs-string">""</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">false</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"份量须为 whole 或 half"</span>));
+
+        verify(dishService, never()).getDishById(any());
+        verify(orderService, never()).submitOrder(any());
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">createOrder_shouldRejectWhenDishNotInTomorrowMenu</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        User student = <span class="hljs-keyword">new</span> User(<span class="hljs-string">"stu1"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"student"</span>, <span class="hljs-string">"张三"</span>);
+        Dish dish = <span class="hljs-keyword">new</span> Dish(<span class="hljs-string">"D001"</span>, <span class="hljs-string">"红烧肉"</span>, <span class="hljs-number">20.0</span>, <span class="hljs-string">"desc"</span>, <span class="hljs-string">"2099-01-01"</span>);
+        when(userDAO.findByUsername(<span class="hljs-string">"stu1"</span>)).thenReturn(student);
+        when(dishService.getDishById(<span class="hljs-string">"D001"</span>)).thenReturn(dish);
+        when(orderService.getTomorrowDate()).thenReturn(<span class="hljs-string">"2099-01-02"</span>);
+
+        mockMvc.perform(post(<span class="hljs-string">"/api/orders"</span>)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(<span class="hljs-string">""</span><span class="hljs-string">"
+                                {"</span>username<span class="hljs-string">":"</span>stu1<span class="hljs-string">","</span>dishId<span class="hljs-string">":"</span>D001<span class="hljs-string">","</span>portion<span class="hljs-string">":"</span>whole<span class="hljs-string">"}
+                                "</span><span class="hljs-string">""</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">false</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"该菜品不在明日可订菜单中"</span>));
+
+        verify(orderService, never()).submitOrder(any());
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">createOrder_shouldReturnSuccessWhenSubmitSucceeded</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        User student = <span class="hljs-keyword">new</span> User(<span class="hljs-string">"stu1"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"student"</span>, <span class="hljs-string">"张三"</span>);
+        Dish dish = <span class="hljs-keyword">new</span> Dish(<span class="hljs-string">"D001"</span>, <span class="hljs-string">"红烧肉"</span>, <span class="hljs-number">20.0</span>, <span class="hljs-string">"desc"</span>, <span class="hljs-string">"2099-01-02"</span>);
+        Order order = <span class="hljs-keyword">new</span> Order();
+        order.setOrderId(<span class="hljs-string">"O1001"</span>);
+        order.setUsername(<span class="hljs-string">"stu1"</span>);
+
+        when(userDAO.findByUsername(<span class="hljs-string">"stu1"</span>)).thenReturn(student);
+        when(dishService.getDishById(<span class="hljs-string">"D001"</span>)).thenReturn(dish);
+        when(orderService.getTomorrowDate()).thenReturn(<span class="hljs-string">"2099-01-02"</span>);
+        when(orderService.createOrder(student, dish, <span class="hljs-string">"whole"</span>)).thenReturn(order);
+        when(orderService.submitOrder(order)).thenReturn(<span class="hljs-keyword">true</span>);
+
+        mockMvc.perform(post(<span class="hljs-string">"/api/orders"</span>)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(<span class="hljs-string">""</span><span class="hljs-string">"
+                                {"</span>username<span class="hljs-string">":"</span>stu1<span class="hljs-string">","</span>dishId<span class="hljs-string">":"</span>D001<span class="hljs-string">","</span>portion<span class="hljs-string">":"</span>whole<span class="hljs-string">"}
+                                "</span><span class="hljs-string">""</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">true</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"订单创建成功"</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.order.orderId"</span>).value(<span class="hljs-string">"O1001"</span>));
+    }
+}
+</div></code></pre>
+<h2 id="%E6%A1%88%E4%BE%8B-2admindishcontrollersavedelete">案例 2：<code>AdminDishController#save/#delete</code></h2>
+<h3 id="%E5%88%9D%E5%A7%8B-prompt">初始 Prompt</h3>
+<pre class="hljs"><code><div>给管理员菜品接口写几个测试。
+</div></code></pre>
+<h3 id="ai-%E8%BE%93%E5%87%BA%E9%97%AE%E9%A2%98">AI 输出问题</h3>
+<ul>
+<li>仅 happy path，未覆盖权限分支。</li>
+<li>未覆盖 <code>menuDate</code> 非法格式、负价格、空字段。</li>
+<li>未覆盖“关联订单不可删除”的业务约束。</li>
+</ul>
+<h3 id="%E6%94%B9%E8%BF%9B-promptcot-%E5%88%86%E6%AD%A5%E9%AA%A4--%E8%A7%92%E8%89%B2%E6%89%AE%E6%BC%94">改进 Prompt（CoT 分步骤 + 角色扮演）</h3>
+<pre class="hljs"><code><div>你扮演“代码评审 + 测试设计师”。
+先按分支清单设计，再输出最终测试代码（不输出思维链）。
+
+模块：AdminDishController（WebMvcTest + MockBean）
+必须覆盖：
+Step1 非 admin 查询列表失败：message=无权限管理菜品
+Step2 save 入参校验：menuDate 非 yyyy-MM-dd 失败
+Step3 save 数据清洗：id/name/menuDate trim，description null -&gt; &quot;&quot;
+Step4 delete 业务约束：countByDishId &gt; 0 时失败
+Step5 delete 成功分支：success=true
+
+规则：
+- 每个测试断言 success + message（或关键字段）
+- 至少一个失败分支断言 never()
+</div></code></pre>
+<h3 id="%E6%9C%80%E7%BB%88%E5%8F%AF%E7%94%A8%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81">最终可用测试代码</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">package</span> com.canteen.controller;
+
+<span class="hljs-keyword">import</span> com.canteen.dao.OrderDAO;
+<span class="hljs-keyword">import</span> com.canteen.dao.UserDAO;
+<span class="hljs-keyword">import</span> com.canteen.entity.Dish;
+<span class="hljs-keyword">import</span> com.canteen.entity.User;
+<span class="hljs-keyword">import</span> com.canteen.service.DishService;
+<span class="hljs-keyword">import</span> org.junit.jupiter.api.Test;
+<span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;
+<span class="hljs-keyword">import</span> org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+<span class="hljs-keyword">import</span> org.springframework.boot.test.mock.mockito.MockBean;
+<span class="hljs-keyword">import</span> org.springframework.http.MediaType;
+<span class="hljs-keyword">import</span> org.springframework.test.web.servlet.MockMvc;
+
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.ArgumentMatchers.any;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.Mockito.never;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.Mockito.verify;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.mockito.Mockito.when;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+<span class="hljs-meta">@WebMvcTest</span>(AdminDishController<span class="hljs-class">.<span class="hljs-keyword">class</span>)
+<span class="hljs-title">class</span> <span class="hljs-title">AdminDishControllerMockTest</span> </span>{
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> MockMvc mockMvc;
+
+    <span class="hljs-meta">@MockBean</span>
+    <span class="hljs-keyword">private</span> UserDAO userDAO;
+    <span class="hljs-meta">@MockBean</span>
+    <span class="hljs-keyword">private</span> DishService dishService;
+    <span class="hljs-meta">@MockBean</span>
+    <span class="hljs-keyword">private</span> OrderDAO orderDAO;
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">list_shouldRejectWhenNotAdmin</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        when(userDAO.findByUsername(<span class="hljs-string">"stu1"</span>)).thenReturn(<span class="hljs-keyword">new</span> User(<span class="hljs-string">"stu1"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"student"</span>, <span class="hljs-string">"张三"</span>));
+
+        mockMvc.perform(get(<span class="hljs-string">"/api/admin/dishes"</span>).param(<span class="hljs-string">"username"</span>, <span class="hljs-string">"stu1"</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">false</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"无权限管理菜品"</span>));
+
+        verify(dishService, never()).getAllDishes();
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">save_shouldRejectWhenDateInvalid</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        when(userDAO.findByUsername(<span class="hljs-string">"admin"</span>)).thenReturn(<span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"admin"</span>, <span class="hljs-string">"管理员"</span>));
+
+        mockMvc.perform(post(<span class="hljs-string">"/api/admin/dishes"</span>)
+                        .param(<span class="hljs-string">"username"</span>, <span class="hljs-string">"admin"</span>)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(<span class="hljs-string">""</span><span class="hljs-string">"
+                                {"</span>id<span class="hljs-string">":"</span>D001<span class="hljs-string">","</span>name<span class="hljs-string">":"</span>鱼香肉丝<span class="hljs-string">","</span>price<span class="hljs-string">":18.5,"</span>description<span class="hljs-string">":"</span>desc<span class="hljs-string">","</span>menuDate<span class="hljs-string">":"</span><span class="hljs-number">2099</span>/<span class="hljs-number">01</span>/<span class="hljs-number">02</span><span class="hljs-string">"}
+                                "</span><span class="hljs-string">""</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">false</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"供餐日须为 yyyy-MM-dd 格式"</span>));
+
+        verify(dishService, never()).saveDish(any());
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">save_shouldTrimFieldsAndSucceed</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        when(userDAO.findByUsername(<span class="hljs-string">"admin"</span>)).thenReturn(<span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"admin"</span>, <span class="hljs-string">"管理员"</span>));
+        when(dishService.saveDish(any(Dish<span class="hljs-class">.<span class="hljs-keyword">class</span>))).<span class="hljs-title">thenReturn</span>(<span class="hljs-title">true</span>)</span>;
+
+        mockMvc.perform(post(<span class="hljs-string">"/api/admin/dishes"</span>)
+                        .param(<span class="hljs-string">"username"</span>, <span class="hljs-string">"admin"</span>)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(<span class="hljs-string">""</span><span class="hljs-string">"
+                                {"</span>id<span class="hljs-string">":"</span> D002 <span class="hljs-string">","</span>name<span class="hljs-string">":"</span> 糖醋里脊 <span class="hljs-string">","</span>price<span class="hljs-string">":20.0,"</span>description<span class="hljs-string">":null,"</span>menuDate<span class="hljs-string">":"</span> <span class="hljs-number">2099</span>-<span class="hljs-number">01</span>-<span class="hljs-number">03</span> <span class="hljs-string">"}
+                                "</span><span class="hljs-string">""</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">true</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"保存成功"</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.dish.id"</span>).value(<span class="hljs-string">"D002"</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.dish.name"</span>).value(<span class="hljs-string">"糖醋里脊"</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.dish.menuDate"</span>).value(<span class="hljs-string">"2099-01-03"</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.dish.description"</span>).value(<span class="hljs-string">""</span>));
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">delete_shouldRejectWhenDishHasOrders</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        when(userDAO.findByUsername(<span class="hljs-string">"admin"</span>)).thenReturn(<span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"admin"</span>, <span class="hljs-string">"管理员"</span>));
+        when(orderDAO.countByDishId(<span class="hljs-string">"D003"</span>)).thenReturn(<span class="hljs-number">2</span>);
+
+        mockMvc.perform(delete(<span class="hljs-string">"/api/admin/dishes/D003"</span>)
+                        .param(<span class="hljs-string">"username"</span>, <span class="hljs-string">"admin"</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">false</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"该菜品已有 2 条关联订单，无法删除。可修改供餐日或保留记录。"</span>));
+
+        verify(dishService, never()).deleteDishById(any());
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">delete_shouldReturnSuccessWhenRemoved</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        when(userDAO.findByUsername(<span class="hljs-string">"admin"</span>)).thenReturn(<span class="hljs-keyword">new</span> User(<span class="hljs-string">"admin"</span>, <span class="hljs-string">"123"</span>, <span class="hljs-string">"admin"</span>, <span class="hljs-string">"管理员"</span>));
+        when(orderDAO.countByDishId(<span class="hljs-string">"D004"</span>)).thenReturn(<span class="hljs-number">0</span>);
+        when(dishService.deleteDishById(<span class="hljs-string">"D004"</span>)).thenReturn(<span class="hljs-keyword">true</span>);
+
+        mockMvc.perform(delete(<span class="hljs-string">"/api/admin/dishes/D004"</span>)
+                        .param(<span class="hljs-string">"username"</span>, <span class="hljs-string">"admin"</span>))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(<span class="hljs-string">"$.success"</span>).value(<span class="hljs-keyword">true</span>))
+                .andExpect(jsonPath(<span class="hljs-string">"$.message"</span>).value(<span class="hljs-string">"已删除"</span>));
+    }
+}
+</div></code></pre>
+<h2 id="%E8%A6%86%E7%9B%96%E7%8E%87%E6%88%AA%E5%9B%BE%E6%A0%B8%E5%BF%83-api-%E6%A8%A1%E5%9D%97">覆盖率截图（核心 API 模块）</h2>
+<ul>
+<li>覆盖率报告：<code>canteen-server/target/site/jacoco/index.html</code></li>
+<li>核心 API（<code>com.canteen.controller</code>）：<code>Lines 96%</code>，<code>Branches 80%</code></li>
+</ul>
+<p><img src="images/coverage-core-api-8-1.png" alt="核心 API 覆盖率报告截图"></p>
+<hr>
+<h1 id="%E9%A1%B9%E7%9B%AE%E7%BA%A7-agentsmd%E5%9B%9E%E6%89%A3-8-2">项目级 AGENTS.md（回扣 8-2）</h1>
+<h2 id="0-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%E5%85%88%E7%9C%8B%E8%BF%99%E4%B8%80%E6%AE%B5">0) 快速上手（先看这一段）</h2>
+<ul>
+<li>这是一个前后端分离的校园订餐系统：<code>frontend</code>(Vue3) + <code>canteen-server</code>(Spring Boot 3 + MyBatis)。</li>
+<li>核心链路：登录 -&gt; 学生看明日菜单/下单 -&gt; 管理员维护菜品与查看统计。</li>
+<li>后端分层固定：<code>controller -&gt; service -&gt; dao -&gt; mapper/sql</code>，禁止跨层直连。</li>
+<li>新功能优先补 <code>Mock</code> 单测（控制层 <code>WebMvcTest</code>，业务层 <code>Mockito</code>）。</li>
+<li>提交前至少保证：编译通过、已有测试通过、接口返回结构与现有风格一致。</li>
+</ul>
+<h2 id="1-%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0">1) 项目架构概述</h2>
+<ul>
+<li>架构：前后端分离 + 后端经典三层（Controller/Service/DAO）。</li>
+<li>前端通过 HTTP 调用后端 <code>/api/**</code> 接口，不直接访问数据库。</li>
+<li>后端通过 MyBatis DAO + XML mapper 访问 MySQL。</li>
+<li>业务核心围绕“明日订餐”：日期、角色、权限、订单状态约束必须显式校验。</li>
+</ul>
+<h2 id="2-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E">2) 目录结构说明</h2>
+<ul>
+<li><code>frontend/</code>: Vue3 前端工程</li>
+<li><code>canteen-server/src/main/java/com/canteen/controller</code>: API 控制层</li>
+<li><code>canteen-server/src/main/java/com/canteen/service</code>: 业务逻辑层</li>
+<li><code>canteen-server/src/main/java/com/canteen/dao</code>: MyBatis DAO 接口</li>
+<li><code>canteen-server/src/main/java/com/canteen/entity</code>: 实体模型</li>
+<li><code>canteen-server/src/main/resources/mappers</code>: MyBatis XML</li>
+<li><code>canteen-server/src/test/java/com/canteen</code>: 后端单元测试</li>
+<li><code>docs/</code>: 课程报告、实验文档、截图证据</li>
+</ul>
+<h2 id="3-%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E8%81%8C%E8%B4%A3">3) 核心模块职责</h2>
+<ul>
+<li><code>LoginController/LoginService</code>: 用户登录鉴权，返回用户角色(<code>student/admin</code>)。</li>
+<li><code>DishController/DishService</code>: 学生侧“明日菜单”查询。</li>
+<li><code>OrderController/OrderService</code>: 下单、个人订单、取消明日订单、份量更新。</li>
+<li><code>AdminDishController</code>: 管理员菜品增删改查，删除前做订单关联检查。</li>
+<li><code>ReportService</code>: 管理端统计报表（人数、订单量、菜品需求量）。</li>
+</ul>
+<h2 id="4-%E6%B8%90%E8%BF%9B%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8Banthropic-%E9%A3%8E%E6%A0%BC">4) 渐进式工作流程（Anthropic 风格）</h2>
+<ol>
+<li><strong>先理解上下文</strong>：先读目标模块的 Controller + Service + 相关测试。</li>
+<li><strong>再做最小改动</strong>：只改与需求直接相关文件，避免顺手重构无关代码。</li>
+<li><strong>同步补测试</strong>：每新增/修改业务分支，都要新增对应断言。</li>
+<li><strong>最后统一验证</strong>：本地运行测试，检查覆盖率与关键返回字段。</li>
+</ol>
+<h2 id="5-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83%E7%BA%A6%E6%9D%9F">5) 编码规范约束</h2>
+<ul>
+<li>Java 17 语法，沿用现有命名与分层，不引入新架构模式。</li>
+<li>Controller 只做参数校验、权限判断、响应组装；复杂逻辑放 Service。</li>
+<li>返回值保持现有风格：<code>Map&lt;String, Object&gt;</code> + <code>success/message/...</code> 字段。</li>
+<li>错误信息使用现有中文文案风格，避免中英文混杂。</li>
+<li>DAO 只声明数据访问；SQL 逻辑写在 mapper XML，不在 Java 拼接 SQL。</li>
+<li>新增接口必须覆盖：正常路径 + 至少一个边界/失败路径。</li>
+<li>测试优先：
+<ul>
+<li>Controller：<code>@WebMvcTest</code> + <code>@MockBean</code> + <code>MockMvc</code></li>
+<li>Service：<code>MockitoExtension</code> + mock DAO</li>
+</ul>
+</li>
+<li>不修改 <code>target/</code> 产物，不把构建产物当源码维护。</li>
+</ul>
+<h2 id="6-%E7%A6%81%E6%AD%A2%E6%93%8D%E4%BD%9C%E6%B8%85%E5%8D%95">6) 禁止操作清单</h2>
+<ul>
+<li>禁止跨层调用（如 Controller 直接调 DAO）。</li>
+<li>禁止绕过权限校验（学生/管理员角色判断不可省略）。</li>
+<li>禁止删除或弱化已有业务约束（如“仅可取消明日订单”）。</li>
+<li>禁止提交密钥、数据库密码、<code>.env</code> 等敏感信息。</li>
+<li>禁止使用破坏性 Git 操作（<code>reset --hard</code>、强推）处理常规任务。</li>
+<li>禁止在无测试验证情况下大规模改动核心 API。</li>
+</ul>
+<h2 id="7-%E4%BA%A4%E4%BB%98%E8%87%AA%E6%A3%80%E6%B8%85%E5%8D%95">7) 交付自检清单</h2>
+<ul>
+<li>改动是否仅影响目标需求范围？</li>
+<li>接口字段是否与前端约定兼容（<code>success/message/data</code>）？</li>
+<li>关键分支是否有测试覆盖（至少成功+失败）？</li>
+<li><code>canteen-server</code> 测试是否通过，覆盖率是否满足当前任务要求？</li>
+</ul>
+<hr>
+<h1 id="civc-%E8%87%AA%E8%AF%84%E5%AE%A1%E8%AE%A1%E6%8A%A5%E5%91%8A%E5%9B%9E%E6%89%A3-8-3">CIVC 自评审计报告（回扣 8-3）</h1>
+<h2 id="%E5%AE%A1%E8%AE%A1%E5%AF%B9%E8%B1%A1">审计对象</h2>
+<ul>
+<li>项目：<code>canteen-sys</code></li>
+<li>框架：CIVC 四阀门（Constraint / Information / Verification / Correction）</li>
+<li>审计基线：当前仓库代码、<code>README.md</code>、<code>AGENTS.md</code>、现有测试与覆盖率流程</li>
+</ul>
+<h2 id="%E6%80%BB%E4%BD%93%E7%BB%93%E8%AE%BA">总体结论</h2>
+<ul>
+<li><code>Constraint</code>：中等偏弱（可读写范围较大，缺少硬沙盒）</li>
+<li><code>Information</code>：中等偏强（已有项目级上下文文档）</li>
+<li><code>Verification</code>：较强（自动化测试 + 覆盖率门槛已落地）</li>
+<li><code>Correction</code>：中等偏弱（有 Git 可回退，但缺少“一键回滚”标准机制）</li>
+</ul>
+<hr>
+<h2 id="a-constraint%E7%BA%A6%E6%9D%9F">A. Constraint（约束）</h2>
+<h3 id="%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81">当前状态</h3>
+<ul>
+<li>AI 可访问并修改仓库内大多数文件（如 <code>frontend/</code>、<code>canteen-server/</code>、<code>docs/</code>）。</li>
+<li>已有软约束文档：<code>AGENTS.md</code>（分层规范、禁止操作、测试优先）。</li>
+<li>当前未配置文件级硬隔离（如仅允许改 <code>src/**</code>、禁止改 <code>main</code> 受保护文件）。</li>
+</ul>
+<h3 id="%E9%A3%8E%E9%99%A9%E5%88%A4%E6%96%AD">风险判断</h3>
+<ul>
+<li>若 Prompt 不精确，AI 可能越界修改无关模块。</li>
+<li>构建产物（<code>target/</code>）可能被误纳入版本管理。</li>
+</ul>
+<h3 id="%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88%E8%96%84%E5%BC%B1%E9%98%80%E9%97%A8">改进方案（薄弱阀门）</h3>
+<ol>
+<li><strong>分支隔离</strong>：强制 AI 相关改动在 <code>feat/ai-*</code> 分支完成，禁止在主分支直改。</li>
+<li><strong>路径白名单</strong>：在任务说明中固定可改路径（如仅 <code>canteen-server/src/**</code> 与 <code>docs/**</code>）。</li>
+<li><strong>提交前阻断</strong>：新增 pre-commit 检查，禁止提交 <code>target/**</code>、密钥文件、数据库凭据。</li>
+<li><strong>高风险文件保护</strong>：对 <code>application.properties</code>、<code>db.sql</code> 采用“必须人工确认”策略。</li>
+</ol>
+<hr>
+<h2 id="b-information%E5%91%8A%E7%9F%A5">B. Information（告知）</h2>
+<h3 id="%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81">当前状态</h3>
+<ul>
+<li>已有 <code>README.md</code>：架构、目录、模块职责、运行方式、CI 说明。</li>
+<li>已有项目级 <code>AGENTS.md</code>：渐进式披露、分层边界、编码规范、禁令清单。</li>
+<li>能支撑“新 AI 助手快速理解并产出代码”。</li>
+</ul>
+<h3 id="%E9%A3%8E%E9%99%A9%E5%88%A4%E6%96%AD">风险判断</h3>
+<ul>
+<li>业务约束文案分散（README、代码注释、测试中都有），单点事实源不够集中。</li>
+<li>接口字段契约缺少统一 API 清单文档。</li>
+</ul>
+<h3 id="%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88%E8%96%84%E5%BC%B1%E9%98%80%E9%97%A8">改进方案（薄弱阀门）</h3>
+<ol>
+<li><strong>单点上下文入口</strong>：在 <code>AGENTS.md</code> 新增“必须先读文件清单”（README + 核心 Controller + 测试）。</li>
+<li><strong>接口契约文档化</strong>：新增 <code>docs/api-contract.md</code>，统一字段与错误文案。</li>
+<li><strong>业务规则卡片化</strong>：新增 <code>docs/business-rules.md</code>，沉淀“仅可取消明日订单”等硬规则。</li>
+<li><strong>任务模板化</strong>：为 AI 任务提供固定模板（目标、可改路径、验收标准、禁止项）。</li>
+</ol>
+<hr>
+<h2 id="c-verification%E9%AA%8C%E8%AF%81">C. Verification（验证）</h2>
+<h3 id="%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81">当前状态</h3>
+<ul>
+<li>后端有单元测试：<code>canteen-server/src/test/java/**</code>。</li>
+<li>已接入 JaCoCo，核心 API（<code>com.canteen.controller</code>）覆盖率门槛 <code>LINE &gt;= 80%</code>。</li>
+<li>现状实测：<code>Lines 96%</code>、<code>Branches 80%</code>（截图：<code>docs/images/coverage-core-api-8-1.png</code>）。</li>
+<li>本地可通过 <code>mvn clean test</code> 自动触发测试 + 覆盖率检查。</li>
+</ul>
+<h3 id="%E9%A3%8E%E9%99%A9%E5%88%A4%E6%96%AD">风险判断</h3>
+<ul>
+<li>当前验证重心在后端；前端缺少同等级自动化测试门槛。</li>
+<li>对“接口回归兼容性”缺少契约测试（仅靠单元测试与人工联调）。</li>
+</ul>
+<h3 id="%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88%E8%96%84%E5%BC%B1%E9%98%80%E9%97%A8">改进方案（薄弱阀门）</h3>
+<ol>
+<li><strong>CI 强制门禁</strong>：PR 必须通过 <code>mvn clean test</code> 与覆盖率检查才可合并。</li>
+<li><strong>前端补测</strong>：引入 Vue 组件/页面关键流程测试（登录、下单、管理员操作）。</li>
+<li><strong>契约测试</strong>：增加接口契约测试，锁定 <code>success/message/data</code> 字段兼容性。</li>
+<li><strong>变更影响清单</strong>：每次 AI 改动附“影响接口 + 新增测试点”表格。</li>
+</ol>
+<hr>
+<h2 id="d-correction%E7%BA%A0%E6%AD%A3">D. Correction（纠正）</h2>
+<h3 id="%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81">当前状态</h3>
+<ul>
+<li>具备 Git 历史，可人工回退。</li>
+<li>但没有项目约定的“一键回滚”脚本与流程。</li>
+<li>出错后依赖开发者手工执行多步命令，恢复成本较高。</li>
+</ul>
+<h3 id="%E9%A3%8E%E9%99%A9%E5%88%A4%E6%96%AD">风险判断</h3>
+<ul>
+<li>紧急修复场景下，回滚不够标准化，容易误操作。</li>
+<li>多文件改动时，人工挑选回退范围容易遗漏。</li>
+</ul>
+<h3 id="%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88%E8%96%84%E5%BC%B1%E9%98%80%E9%97%A8">改进方案（薄弱阀门）</h3>
+<ol>
+<li><strong>一键回滚脚本</strong>：新增 <code>scripts/rollback-last-change.(ps1|sh)</code>，回退最近一次 AI 提交并打印影响文件。</li>
+<li><strong>最小提交策略</strong>：AI 改动按功能拆分小提交，降低回滚粒度成本。</li>
+<li><strong>失败自动止损</strong>：CI 失败自动阻止合并，并提示回滚命令模板。</li>
+<li><strong>回滚演练</strong>：每个迭代至少一次“故障-回滚-恢复”演练并记录耗时。</li>
+</ol>
+<hr>
+<h2 id="%E5%AE%A1%E8%AE%A1%E7%BB%93%E8%AE%BA%E4%B8%8E%E4%BC%98%E5%85%88%E7%BA%A7">审计结论与优先级</h2>
+<ul>
+<li><strong>P0（立即）</strong>：Constraint 的路径白名单 + pre-commit 阻断；Correction 的一键回滚脚本。</li>
+<li><strong>P1（本迭代）</strong>：Information 的 API 契约与业务规则文档。</li>
+<li><strong>P2（下迭代）</strong>：Verification 扩展到前端自动化与契约测试。</li>
+</ul>
+<p>执行以上改进后，项目将从“可用的 AI 协作”提升为“可控、可证、可恢复的 AI 协作”。</p>
+
+</body>
+</html>
