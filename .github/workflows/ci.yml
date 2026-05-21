@@ -70,13 +70,13 @@ jobs:
 
       - name: Init database schema
         run: |
-          mysql -h 127.0.0.1 -u root canteen < canteen-server/src/main/resources/db.sql
+          mysql -h 127.0.0.1 -u root --ssl-mode=DISABLED canteen < canteen-server/src/main/resources/db.sql
         env:
           MYSQL_PWD: 050512
 
       - name: Run integration tests
         working-directory: ./canteen-server
-        run: mvn test -Dtest=CanteenApiIntegrationTest -DfailIfNoTests=false
+        run: mvn test -Dtest=CanteenApiIntegrationTest -DfailIfNoTests=false -Djacoco.skip=true
 
   docker-build-push:
     runs-on: ubuntu-latest
