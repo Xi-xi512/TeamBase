@@ -52,10 +52,9 @@ jobs:
 
       - name: Start MySQL
         run: |
-          docker run -d --name mysql \
+          docker run -d --name mysql --network host \
             -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
             -e MYSQL_DATABASE=canteen \
-            -p 3306:3306 \
             mysql:8.0 \
             --default-authentication-plugin=mysql_native_password
           for i in $(seq 1 30); do
