@@ -53,7 +53,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
-          --default-authentication-plugin=mysql_native_password
 
     steps:
       - name: Checkout code
@@ -71,7 +70,7 @@ jobs:
 
       - name: Init database schema
         run: |
-          mysql -h 127.0.0.1 -u root --ssl-mode=DISABLED canteen < canteen-server/src/main/resources/db.sql
+          mysql -h 127.0.0.1 -u root --get-server-public-key canteen < canteen-server/src/main/resources/db.sql
         env:
           MYSQL_PWD: 050512
 
