@@ -32,6 +32,8 @@
   - `src/views/AdminView.vue`：管理员端（统计/菜品管理）
 - `.github/workflows/ci.yml`：CI 流水线定义
 - `docs/iteration-report.md`：本次迭代书面报告（维护性 + TDD + 文档）
+- `docs/ai-testing-prompt-evolution-8-1.md`：AI 辅助测试 Prompt 演化实验记录（含 2 组对比案例）
+- `docs/civc-self-audit-8-3.md`：CIVC 四阀门自评审计报告（含薄弱项改进方案）
 
 ## 核心业务模块职责
 
