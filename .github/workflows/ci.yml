@@ -65,10 +65,11 @@ jobs:
             fi
             sleep 2
           done
-          # 设置 root 密码为 mysql_native_password 认证
+          # 设置 root 密码 + mysql_native_password，让 JDBC 能连
           docker exec mysql mysql -u root -e "
             ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '050512';
-            ALTER USER 'root'@'%'       IDENTIFIED WITH mysql_native_password BY '050512';
+            CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH mysql_native_password BY '050512';
+            GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
             FLUSH PRIVILEGES;
           "
 
