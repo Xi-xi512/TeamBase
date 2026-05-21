@@ -78,6 +78,9 @@ jobs:
   docker-build-push:
     runs-on: ubuntu-latest
     needs: build-and-test
+    permissions:
+      contents: read
+      packages: write
     # 只在 push 到 develop 时构建推送镜像，PR 触发时跳过
     if: github.event_name == 'push'
 
