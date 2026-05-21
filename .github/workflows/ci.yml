@@ -39,21 +39,6 @@ jobs:
 
   integration-test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: 050512
-          MYSQL_DATABASE: canteen
-          MYSQL_ROOT_HOST: '%'
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping -h localhost -u root -p050512"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -65,14 +50,29 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Install MySQL client
-        run: sudo apt-get update && sudo apt-get install -y mysql-client
-
-      - name: Init database schema
+      - name: Start MySQL
         run: |
-          mysql -h 127.0.0.1 -u root --get-server-public-key canteen < canteen-server/src/main/resources/db.sql
-        env:
-          MYSQL_PWD: 050512
+          docker run -d --name mysql \
+            -e MYSQL_ROOT_PASSWORD=050512 \
+            -e MYSQL_DATABASE=canteen \
+            -p 3306:3306 \
+            mysql:8.0 \
+            --default-authentication-plugin=mysql_native_password
+          # 等待 MySQL 就绪
+          for i in $(seq 1 30); do
+            if docker exec mysql mysqladmin ping -h localhost -u root -p050512 --silent 2>/dev/null; then
+              echo "MySQL is ready"
+              break
+            fi
+            echo "Waiting for MySQL... $i"
+            sleep 2
+          done
+
+      - name: Init database
+        run: docker exec -i mysql mysql -u root -p050512 canteen < canteen-server/src/main/resources/db.sql
+
+      - name: Verify tables
+        run: docker exec mysql mysql -u root -p050512 canteen -e "SHOW TABLES;"
 
       - name: Run integration tests
         working-directory: ./canteen-server
