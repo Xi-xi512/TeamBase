@@ -74,7 +74,9 @@ jobs:
           "
 
       - name: Init database
-        run: docker exec -i mysql mysql -u root -p050512 canteen < canteen-server/src/main/resources/db.sql
+        run: |
+          docker exec mysql mysql -u root -p050512 -e "CREATE DATABASE IF NOT EXISTS canteen DEFAULT CHARACTER SET utf8mb4;"
+          docker exec -i mysql mysql -u root -p050512 canteen < canteen-server/src/main/resources/db.sql
 
       - name: Verify tables
         run: docker exec mysql mysql -u root -p050512 canteen -e "SHOW TABLES;"
