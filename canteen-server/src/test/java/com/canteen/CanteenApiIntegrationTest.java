@@ -38,10 +38,15 @@ class CanteenApiIntegrationTest {
     @org.junit.jupiter.api.Order(1)
     void loginSuccess() {
         Map<String, String> body = Map.of("username", "student1", "password", "123456");
+        ResponseEntity<String> raw = restTemplate.exchange(
+                url("/api/login"), HttpMethod.POST,
+                new HttpEntity<>(body), String.class);
+        System.out.println("=== LOGIN RAW STATUS: " + raw.getStatusCode());
+        System.out.println("=== LOGIN RAW BODY: " + raw.getBody());
+        assertThat(raw.getStatusCode()).isEqualTo(HttpStatus.OK);
         ResponseEntity<Map<String, Object>> resp = restTemplate.exchange(
                 url("/api/login"), HttpMethod.POST,
                 new HttpEntity<>(body), MAP_TYPE);
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         Map<String, Object> data = resp.getBody();
         assertThat(data.get("success")).isEqualTo(true);
         assertThat(data.get("user")).isNotNull();
