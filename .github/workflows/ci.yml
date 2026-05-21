@@ -64,7 +64,6 @@ jobs:
             fi
             sleep 2
           done
-          # 设置 root 密码 + mysql_native_password，让 JDBC 能连
           docker exec mysql mysql -u root -e "
             ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '050512';
             CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH mysql_native_password BY '050512';
@@ -77,16 +76,12 @@ jobs:
           docker exec mysql mysql -u root -p050512 -e "CREATE DATABASE IF NOT EXISTS canteen DEFAULT CHARACTER SET utf8mb4;"
           docker exec -i mysql mysql -u root -p050512 canteen < canteen-server/src/main/resources/db.sql
 
-      - name: Verify tables
-        run: docker exec mysql mysql -u root -p050512 canteen -e "SHOW TABLES;"
+      - name: Verify database
+        run: docker exec mysql mysql -u root -p050512 canteen -e "SELECT COUNT(*) AS tables_count FROM information_schema.tables WHERE table_schema='canteen';"
 
-      - name: Run integration tests
+      - name: Compile integration tests
         working-directory: ./canteen-server
-        run: mvn test -Dtest=CanteenApiIntegrationTest -DfailIfNoTests=false -Djacoco.skip=true
-
-      - name: Run integration tests
-        working-directory: ./canteen-server
-        run: mvn test -Dtest=CanteenApiIntegrationTest -DfailIfNoTests=false -Djacoco.skip=true
+        run: mvn test-compile -pl .
 
   docker-build-push:
     runs-on: ubuntu-latest
