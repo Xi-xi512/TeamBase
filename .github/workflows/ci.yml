@@ -58,21 +58,29 @@ jobs:
             -p 3306:3306 \
             mysql:8.0 \
             --default-authentication-plugin=mysql_native_password
-          # 等待 MySQL 就绪
           for i in $(seq 1 30); do
-            if docker exec mysql mysqladmin ping -h localhost -u root -p050512 --silent 2>/dev/null; then
-              echo "MySQL is ready"
+            if docker exec -e MYSQL_PWD=050512 mysql mysqladmin ping -h localhost -u root --silent 2>/dev/null; then
+              echo "MySQL ready"
               break
             fi
-            echo "Waiting for MySQL... $i"
             sleep 2
           done
+          # 把 root 改为 mysql_native_password，让 Spring Boot 能连上
+          docker exec -e MYSQL_PWD=050512 mysql mysql -u root -e "
+            ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '050512';
+            ALTER USER 'root'@'%'       IDENTIFIED WITH mysql_native_password BY '050512';
+            FLUSH PRIVILEGES;
+          "
 
       - name: Init database
-        run: docker exec -i mysql mysql -u root -p050512 canteen < canteen-server/src/main/resources/db.sql
+        run: docker exec -e MYSQL_PWD=050512 -i mysql mysql -u root canteen < canteen-server/src/main/resources/db.sql
 
       - name: Verify tables
-        run: docker exec mysql mysql -u root -p050512 canteen -e "SHOW TABLES;"
+        run: docker exec -e MYSQL_PWD=050512 mysql mysql -u root canteen -e "SHOW TABLES;"
+
+      - name: Run integration tests
+        working-directory: ./canteen-server
+        run: mvn test -Dtest=CanteenApiIntegrationTest -DfailIfNoTests=false -Djacoco.skip=true
 
       - name: Run integration tests
         working-directory: ./canteen-server
